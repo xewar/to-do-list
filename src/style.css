@@ -1,0 +1,689 @@
+@import 'normalize.css';
+@import url('https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap');
+
+:root {
+  --text: black;
+  --accent_0: #bfdbfe;
+  --accent_1: #dbeafe;
+  --accent_6: #93c5fd;
+  --accent_7: #eff6ff;
+  --background: white;
+}
+body,
+html {
+  font-family: 'Lora';
+  background-color: var(--background);
+}
+
+.rowTwo {
+  background-color: var(--background);
+}
+
+.addNewButton {
+  border: none;
+  padding: 5px 10px;
+  background-color: var(--accent_0);
+}
+.colorButton,
+.projectCard,
+.friendsContainer,
+.clearTasksButton {
+  border: 3px solid var(--accent_0);
+}
+.colorButton {
+  background-color: white;
+  padding: 0 1rem;
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.5rem;
+  align-items: center;
+}
+.clearTasksButton {
+  background-color: white;
+  padding: 0 1rem;
+}
+.colorButton,
+.clearTasksButton {
+  max-width: max-content;
+}
+.projectTitle {
+  font-weight: 600;
+  font-size: 1.1rem;
+  padding-top: 0.5rem;
+  height: max-content;
+}
+
+.projectCard {
+  background-color: var(--background);
+  border: 3px solid var(--accent_0);
+  padding: 1rem;
+  padding-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+.taskContainer {
+  display: grid;
+  gap: 1rem;
+  align-self: top;
+}
+.taskViewContainer {
+  display: none;
+}
+
+.task {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 1rem;
+  align-items: center;
+}
+
+p {
+  margin: 0;
+}
+.nav:hover {
+  background-color: var(--accent_0);
+}
+.taskText {
+  padding: 0.5rem;
+}
+.taskText:hover {
+  background-color: var(--accent_1);
+  /* padding: 1rem; */
+}
+/* Responsive Design components */
+/* Mobile Styles */
+@media only screen and (max-width: 750px) {
+  .navContainer,
+  .searchBar,
+  .searchIcon,
+  .account {
+    display: none;
+  }
+  /* pop-up menu */
+  .navContainer {
+    /* position: absolute; */
+    background-color: white;
+    top: 3%;
+    left: 10%;
+    font-size: 1.4rem;
+    border: 3px solid var(--accent_0);
+    gap: 2rem;
+    padding: 1rem;
+    width: 40vw;
+  }
+  .displayContainer {
+    display: grid;
+  }
+
+  body {
+    display: grid;
+  }
+  .taskViewContainer {
+    display: none;
+  }
+
+  .left,
+  .right {
+    display: grid;
+    grid-template-columns: 10% 1fr 10%;
+    align-items: center;
+  }
+
+  h1 {
+    /* margin-block: .6rem; */
+    margin-left: 2%;
+    justify-content: center;
+    align-self: center;
+  }
+  .right {
+    grid-template-rows: max-content max-content max-content 1fr;
+  }
+  .showNavMenu {
+    align-self: center;
+    font-size: 3.5rem;
+    color: var(--accent_0);
+    justify-self: center;
+  }
+
+  .rowTwo,
+  .title {
+    grid-column: 2/-1;
+  }
+  .rowTwo {
+    grid-column: 1/-1;
+  }
+
+  .rowTwo {
+    display: grid;
+    grid-template-columns: 10% 1fr 4fr 10%;
+    align-items: center;
+    padding: 1%;
+  }
+
+  .avatar {
+    grid-column: 2;
+  }
+  .greeting {
+    font-size: 1.5rem;
+    text-align: left;
+    font-style: italic;
+  }
+
+  .friendsContainer {
+    margin-top: 1rem;
+    padding: 0 1rem;
+    background-color: var(--accent_0);
+  }
+  .friends {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    padding-bottom: 1rem;
+    gap: 10px;
+  }
+  .friend {
+    display: flex;
+    margin-left: 5%;
+    align-items: center;
+    gap: 10%;
+  }
+
+  .footer {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-row: -1;
+    grid-column: 2;
+    gap: 1rem;
+    margin: 10px 0px;
+  }
+  .chanlina,
+  .naserian,
+  .noura {
+    height: 40px;
+    width: 40px;
+    background-repeat: no-repeat;
+  }
+  /* ------------Kanban View------------ */
+
+  .mainContainer {
+    row-gap: 20px;
+    align-items: center;
+    grid-column: 2;
+    gap: 1rem;
+  }
+  .mainContainerTop {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+  .titleText,
+  .addNewButton {
+    margin-top: 5%;
+    margin-bottom: 4%;
+    grid-row: 1;
+  }
+  .titleText {
+    justify-self: left;
+    grid-column: 1;
+  }
+  .addNewButton {
+    grid-row: 1;
+    grid-column: 2;
+    width: 50%;
+    justify-self: right;
+    border: none;
+    padding: 5px 10px;
+    background-color: var(--accent_0);
+  }
+  .projectTitle,
+  .friendsContainerTitle {
+    font-weight: 600;
+    font-size: 1.1rem;
+    /* margin: .5rem; */
+    padding-top: 0.5rem;
+  }
+  .cardsContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(225px, 1fr));
+    gap: 1rem;
+  }
+
+  /* ------------Task List View------------ */
+  .dueDateTitle,
+  .taskTitle,
+  .priorityTitle,
+  .notesTitle {
+    display: none;
+  }
+  .taskViewContainer {
+    display: none;
+    grid-template-columns: 25px 1fr 1fr 1fr max-content;
+
+    gap: 1rem;
+    align-items: center;
+  }
+  .taskViewContainer label.checkmark {
+    grid-column: 1;
+  }
+  .taskText {
+    grid-column: 2/4;
+  }
+  .dueDate {
+    grid-column: 4;
+  }
+  .priority {
+    grid-column: 5;
+  }
+  .notes {
+    grid-column: 2/5;
+    background-color: var(--accent_1);
+    padding: 1rem;
+  }
+  .editIcon {
+    /* grid-row:1; */
+  }
+}
+
+/* Tablet + Desktop Styles */
+@media only screen and (min-width: 751px) {
+  .showNavMenu {
+    display: none;
+  }
+  body {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+  }
+
+  .left {
+    display: grid;
+    grid-template-rows: max-content 1fr;
+    margin: 1rem;
+    margin-right: 0;
+  }
+  .title {
+    margin-top: 0.5rem;
+  }
+  .navContainer {
+    display: grid;
+    align-items: start;
+    grid-template-rows: max-content max-content max-content;
+    gap: 2rem;
+  }
+  .displayContainer {
+    display: grid;
+  }
+  .nav {
+    display: block;
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+  }
+
+  .right {
+    display: grid;
+    grid-template-columns: 36px 1fr 1fr 140px;
+    grid-template-rows: max-content max-content max-content 1fr;
+    margin: 1rem 1rem;
+    margin-top: 1.5rem;
+    background-color: var;
+  }
+
+  .account {
+    display: grid;
+    grid-column: 4;
+    grid-row: 1;
+    grid-template-columns: max-content repeat(3, max-content);
+    justify-items: right;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .username {
+    font-weight: 500;
+  }
+
+  .searchBar {
+    height: 1.5rem;
+    width: 60%;
+    align-self: center;
+    justify-self: right;
+    margin-right: 1rem;
+    border: 2px solid var(--accent_0);
+  }
+  .search {
+    grid-column: 3;
+    grid-row: 1;
+    display: flex;
+    justify-content: end;
+    gap: 0.5rem;
+  }
+  .rowTwo {
+    display: grid;
+    grid-column: 2;
+    grid-template-columns: max-content max-content max-content 1fr;
+    align-items: center;
+    gap: 1rem;
+    grid-row: 1/2;
+  }
+  .greeting {
+    font-weight: 600;
+    font-style: italic;
+    font-size: 1.2rem;
+  }
+  .avatar {
+    height: 50px;
+    width: 50px;
+  }
+  .rowTwo,
+  .topNav {
+    /* background-color: var(--accent_0); */
+  }
+
+  .addNewButton {
+    grid-column: 3;
+  }
+  .titleText {
+    grid-column: 1;
+    font-weight: 600;
+  }
+
+  .friendsContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    grid-template-rows: max-content max-content 1fr;
+    height: max-content;
+  }
+  .friendsContainerTitle {
+    background-color: var(--accent_0);
+    text-align: center;
+  }
+
+  .friend {
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+    padding: 0.5rem;
+  }
+  .user {
+    font-size: 0.8rem;
+  }
+  .chanlina,
+  .naserian,
+  .noura {
+    height: 30px;
+    width: 30px;
+    background-repeat: no-repeat;
+  }
+  .cardsContainer {
+    display: grid;
+    /* grid-template-columns: repeat(auto-fit, minmax(225px, 1fr)); */
+    grid-template-columns: repeat(auto-fit, clamp(200px, 300px, 600px));
+    grid-template-rows: max-content;
+    gap: 1rem;
+  }
+
+  .footer {
+    display: grid;
+    gap: 1rem;
+    grid-row: -1;
+    grid-column: 2;
+    margin-right: 1rem;
+  }
+
+  /* ------------Kanban View------------ */
+  .mainContainer {
+    display: grid;
+    grid-column: 2/-1;
+    grid-row: 3/-1;
+    grid-template-columns: 1fr 140px;
+    grid-template-rows: max-content 1fr max-content;
+    gap: 1rem;
+    border-top: 4px double var(--accent_0);
+  }
+  .mainContainerTop {
+    margin-top: 1rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr 140px;
+    grid-column: 1/-1;
+    align-items: center;
+  }
+
+  /* ------------New task/project pop-up----------- */
+
+  .newProjectForm {
+    position: absolute;
+    background-color: white;
+    top: 10%;
+    right: 30%;
+  }
+  .formBackground {
+    position: absolute;
+    background-color: var(--accent_6);
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    display: none;
+  }
+  /* ------------Task List View------------ */
+  .taskViewContainer {
+    grid-column: 1/-1;
+    grid-template-columns: max-content 1fr repeat(2, max-content) 2fr max-content;
+    grid-template-rows: max-content;
+    height: max-content;
+    gap: 1rem;
+    align-items: top;
+  }
+  /*formatting top row  */
+  .taskViewContainer div:nth-child(-n + 5) {
+    border-bottom: 4px double var(--accent_1);
+    padding: 0 1rem;
+  }
+  .taskViewContainer .task {
+    display: grid;
+    grid-column: 1/-1;
+    grid-template-columns: inherit;
+  }
+  .taskViewContainer .taskText,
+  .dueDate,
+  .priority,
+  .notes {
+    /* adjusting to center top line of text with checkbox */
+    margin-top: 3px;
+    padding: 1rem;
+  }
+  .editIcon {
+    margin-top: 1.2rem;
+  }
+  .taskViewContainer label {
+    margin: 1rem 0;
+  }
+  .dueDate {
+    grid-column: 3;
+  }
+  .priority {
+    grid-column: 4;
+  }
+
+  .notes {
+    align-items: top;
+    background-color: var(--accent_1);
+  }
+
+  .taskTitle {
+    grid-column: 2;
+  }
+  .taskText {
+    grid-column: 2;
+    height: max-content;
+  }
+
+  .taskViewContainer .checkmark {
+    grid-column: 1;
+  }
+  /* .taskViewContainer div {
+        margin:0;
+        padding:0;
+    } */
+}
+
+/* Styling the new task/project pop-up in kanban */
+.newProjectForm,
+.newProjectForm button,
+.newProjectForm input,
+.newProjectForm textarea .newProjectForm select {
+  /* border-radius: 5px; */
+}
+.formBackground {
+  grid-column: 1/-1;
+}
+.newProjectForm {
+  border: 3px solid var(--accent_0);
+  padding: 1rem;
+  grid-column: 1/-1;
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: 1fr 1fr;
+  display: none;
+}
+.newProjectForm input,
+.newProjectForm textarea,
+.newProjectForm select {
+  border: 3px solid var(--accent_0);
+  grid-column: 1/-1;
+  padding: 0.5rem;
+  align-items: center;
+}
+.closeButton {
+  grid-column: 2;
+  color: white;
+  width: max-content;
+  justify-self: right;
+}
+.closeButton,
+.popupButton {
+  background-color: var(--accent_0);
+  border: none;
+}
+
+#newProjectButton,
+#newTaskButton {
+  background-color: var(--accent_0);
+  border: none;
+}
+
+.popupButton {
+  width: max-content;
+  padding: 0.5rem 2rem;
+}
+#newTaskButton,
+#newProjectButton {
+  padding: 0.5rem 0;
+}
+
+/* Styling the checkmarks */
+/* Hiding the existing checkmark */
+input[type='checkbox'] {
+  display: none;
+}
+/* New box for custom checkmarks */
+.checkmark {
+  height: 1.5rem;
+  width: 1.5rem;
+  background-color: var(--accent_1);
+}
+/* Change color on hover */
+label.checkmark:hover {
+  background-color: var(--accent_0);
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.check:after {
+  content: '';
+  position: relative;
+  display: none;
+}
+/* Show the checkmark when checked */
+label input:checked ~ .check:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+label .check:after {
+  left: 0.5rem;
+  top: 4px;
+  width: 5px;
+  height: 10px;
+  border: solid black;
+  border-width: 0 1px 1px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+/* style completed tasks */
+.checked + p,
+.checked + div,
+.checked + div + div,
+.checked + div + div + div {
+  color: var(--accent_6);
+  text-decoration: line-through;
+}
+.checked + div + div + div + div {
+  background-color: var(--accent_1);
+  color: var(--accent_6);
+  text-decoration: line-through;
+}
+
+/* Icons */
+.avatar {
+  background-image: url(./images/avatar.svg);
+  background-repeat: no-repeat;
+  overflow: visible;
+  height: 70px;
+  width: 70px;
+}
+.searchIcon {
+  background-image: url(./images/magnifying_glass.svg);
+  height: 75px;
+  width: 60px;
+  background-repeat: no-repeat;
+  transform: scaleX(-1);
+}
+.smallerAvatar {
+  height: 35px;
+  width: 35px;
+  border: 1px solid black;
+  border-radius: 100%;
+  background-color: var(--accent_0);
+}
+.editIcon {
+  background-image: url(./images/pencil.svg);
+  height: 25px;
+  width: 25px;
+  background-repeat: no-repeat;
+  filter: invert(77%) sepia(60%) saturate(561%) hue-rotate(291deg)
+    brightness(103%) contrast(101%);
+}
+
+.alertBell {
+  background-image: url(./images/bell_2.svg);
+  height: 26px;
+  width: 26px;
+}
+.clearCompleted {
+  background-image: url(./images/broom.svg);
+  background-repeat: no-repeat;
+  height: 1.1rem;
+  width: 1.1rem;
+}
+
+.chanlina {
+  background-image: url(./images/chanlina.svg);
+}
+.naserian {
+  background-image: url(./images/naserian.svg);
+}
+.noura {
+  background-image: url(./images/noura.svg);
+}

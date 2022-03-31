@@ -1,75 +1,67 @@
-import { Task } from '../../to-do/src/task';
+import project from './project';
+// import storage from './storage.js';
+// const { updateStorage } = storage;
+let task = (() => {
+  const { updateProjectList } = project;
+  const taskFactory = (
+    taskName,
+    project,
+    dueDate,
+    priority,
+    notes,
+    isCompleted
+  ) => {
+    const getName = () => taskName;
+    const getDate = () => dueDate;
+    const getProject = () => project;
+    const getNotes = () => notes;
+    const getCompletedStatus = () => isCompleted;
+    const toggleCompletedStatus = () => {
+      if (isCompleted === true) {
+        isCompleted = false;
+      } else isCompleted = true;
+    };
+    const getPriority = () => priority;
 
-const task = ((
-  name,
-  project,
-  dueDate,
-  priority,
-  notes,
-  isCompleted,
-  repeatFrequency
-) => {
-  const getName = () => name;
-  const setName = newName => (name = newName);
-  const getDate = () => dueDate;
-  const setDate = newDate => (dueDate = newDate);
-  const getProject = () => project;
-  const setProject = newProjectName => {
-    newProjectName === ''
-      ? (project = 'No Project')
-      : (project = newProjectName);
+    return {
+      getName,
+      getDate,
+      getProject,
+      getNotes,
+      getCompletedStatus,
+      toggleCompletedStatus,
+      getPriority,
+    };
   };
-  const getNotes = () => notes;
-  const setNotes = newNotes => (notes = newNotes);
-  const getCompletedStatus = () => isCompleted;
-  const setCompletedStatus = bool => (isCompleted = bool);
-  const getAllTasks = () =>
-    Object.freeze([
-      name,
-      project,
-      dueDate,
-      priority,
-      notes,
-      isCompleted,
-      repeatFrequency,
-    ]);
-  const getPriority = () => priority;
-  const setPriority = newPriorityStatus => (priority = newPriorityStatus);
-  const toJSON = () => getAllTasks();
+
   const allTasksList = [];
   const addTaskToList = task => {
     allTasksList.push(task);
+    updateProjectList(task);
   };
-  const createTask = taskObj => {
-    let newTask = Task(
-      taskObj.taskName,
-      taskObj.projectName,
-      taskObj.dueDate,
-      taskObj.priority,
-      taskObj.notes,
-      false
-    );
-    //could also update taskList and updateStorage here
-    return newTask;
+
+  const updateTaskStatus = taskName => {
+    allTasksList.forEach(task => {
+      if (task.getName() === taskName) {
+        task.toggleCompletedStatus();
+      }
+    });
   };
+
+  // populate taskList from storage
+  const populateTasks = tasksArray => {
+    for (const taskItem of tasksArray) {
+      const newTask = taskFactory(...taskItem);
+      addTaskToList(newTask); // add the task to the all Tasks List
+    }
+  };
+
   return {
-    toJSON,
-    getAllTasks,
-    getName,
-    setName,
-    getDate,
-    setDate,
-    getProject,
-    setProject,
-    getNotes,
-    setNotes,
-    getCompletedStatus,
-    setCompletedStatus,
-    getPriority,
-    setPriority,
+    taskFactory,
     allTasksList,
     addTaskToList,
-    createTask,
+    populateTasks,
+    updateTaskStatus,
   };
 })();
 

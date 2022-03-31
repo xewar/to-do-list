@@ -1,10 +1,14 @@
-import { allTasksList } from '../../to-do/src/task.js';
+import dom from './dom.js';
+import project from './project.js';
 import task from './task.js';
 
 let storage = (() => {
-  const { createTask, addTaskToList, allTasksList } = task;
+  'use strict';
+  const { populateTasks, allTasksList } = task;
+  const { renderTask, renderProject } = dom;
+  const { projectList, updateProjectList } = project;
 
-  // populate storage
+  //set storage
   const updateStorage = () => {
     localStorage.setItem('allTasksList', JSON.stringify(allTasksList));
   };
@@ -23,53 +27,36 @@ let storage = (() => {
     } else {
       // when loading tasks for the first time, populate page with some example tasks + projects
       const exampleTaskArray = [
-        {
-          taskName: 'Linting',
-          projectName: 'Coding',
-          dueDate: '2022-03-15',
-          priority: 'high',
-          notes: 'Set up a linter and prettier to make your code better.',
-          isCompleted: false,
-        },
-        {
-          taskName: 'Dynamic User Interfaces',
-          projectName: 'Coding',
-          dueDate: '2022-03-15',
-          priority: 'high',
-          notes: 'Practice everyday techniques used by JavaScript programmers',
-          isCompleted: false,
-        },
-        {
-          taskName: 'Go for a run',
-          projectName: 'Exercise',
-          dueDate: '2022-03-17',
-          priority: 'medium',
-          notes: 'Example notes',
-          isCompleted: false,
-        },
-        {
-          taskName: 'Stretch',
-          projectName: 'Exercise',
-          dueDate: '2022-03-18',
-          priority: 'high',
-          notes: 'Example Notes',
-          isCompleted: false,
-        },
+        [
+          'Linting',
+          'Coding',
+          '2022-03-15',
+          'high',
+          'Set up a linter and prettier to make your code better.',
+          false,
+        ],
+        [
+          'Dynamic User Interfaces',
+          'Coding',
+          '2022-03-16',
+          'high',
+          'Practice everyday techniques used by JavaScript programmers',
+          false,
+        ],
+        [
+          'Go for a run',
+          'Exercise',
+          '2022-03-17',
+          'medium',
+          'Example notes',
+          false,
+        ],
+        ['Stretch', 'Exercise', '2022-03-18', 'high', 'Example Notes', false],
       ];
       populateTasks(exampleTaskArray);
     }
-  };
-
-  // populate tasks from storage, and update DOM + projectsArray
-  const populateTasks = tasksArray => {
-    for (const taskItem of tasksArray) {
-      const newTask = createTask(taskItem);
-      addTaskToList(newTask); // add the task to the all Tasks List
-      //   updateDOM(newTask);
-    }
-    for (let item of allTasksList) {
-      console.log(item.getName());
-    }
+    projectList.forEach(project => renderProject(project));
+    allTasksList.forEach(task => renderTask(task));
   };
 
   // Source: https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API/Using_the_Web_Storage_API
@@ -101,7 +88,7 @@ let storage = (() => {
     }
   }
 
-  return { updateStorage, storageAvailable, getStorage, populateTasks };
+  return { updateStorage, storageAvailable, getStorage };
 })();
 
 export default storage;

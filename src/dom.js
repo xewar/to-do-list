@@ -97,24 +97,6 @@ let dom = (() => {
     task.append(checkbox, p);
     taskContainer.append(task);
   };
-
-  const _renderListView = task => {
-    const checkbox = createCheckbox();
-    taskViewContainer.append(checkbox);
-    divCreator('div', 'taskText', taskViewContainer, task.getName());
-    divCreator('div', 'dueDate', taskViewContainer, task.getDate());
-    divCreator('div', 'priority', taskViewContainer, task.getPriority());
-    divCreator('div', 'notes', taskViewContainer, task.getNotes());
-    divCreator('svg', 'editIcon', taskViewContainer);
-    checkboxCorrection(task, checkbox);
-  };
-  const renderHeadersListView = () => {
-    divCreator('div', 'taskTitle', taskViewContainer, 'Name');
-    divCreator('div', 'dueDateTitle', taskViewContainer, 'Due');
-    divCreator('div', 'priorityTitle', taskViewContainer, 'Priority');
-    divCreator('div', 'notesTitle', taskViewContainer, 'Notes');
-  };
-
   //regenerating kanban view
   const kanbanView = () => {
     friendsContainer.style.display = 'block';
@@ -137,6 +119,35 @@ let dom = (() => {
     }
   };
 
+  const _renderTasksListView = task => {
+    const checkbox = _createCheckbox();
+    taskViewContainer.append(checkbox);
+    divCreator('div', 'taskText', taskViewContainer, task.getName());
+    divCreator('div', 'dueDate', taskViewContainer, task.getDate());
+    divCreator('div', 'priority', taskViewContainer, task.getPriority());
+    divCreator('div', 'notes', taskViewContainer, task.getNotes());
+    divCreator('svg', 'editIcon', taskViewContainer);
+    checkboxCorrection(task, checkbox);
+  };
+  const _renderHeadersListView = () => {
+    divCreator('div', 'taskTitle', taskViewContainer, 'Name');
+    divCreator('div', 'dueDateTitle', taskViewContainer, 'Due');
+    divCreator('div', 'priorityTitle', taskViewContainer, 'Priority');
+    divCreator('div', 'notesTitle', taskViewContainer, 'Notes');
+  };
+  // click on the projects to dynamically generate and view the tasks for each project
+  const _projectView = currentProjectName => {
+    for (const task of allTasksList) {
+      // regenerating tasks
+      if (task.getCompletedStatus() === true && clearCompletedTasksBool) {
+        continue;
+      }
+      if (task.getProject() === currentProjectName) {
+        _renderTasksListView(task);
+      }
+    }
+  };
+
   // all the views except the Kanban view
   const listView = currentProjectName => {
     cardsContainer.style.display = 'none'; // clearing the kanban cards
@@ -147,13 +158,8 @@ let dom = (() => {
     while (taskViewContainer.firstChild) {
       taskViewContainer.removeChild(taskViewContainer.firstChild);
     } // regenerating headers
-    renderHeadersListView();
-    // if (e.target.classList.contains("projects")) {
-    //   projectView(currentProjectName);
-    // }
-    // if (e.target.classList.contains("logbook")) {
-    //   logbookView();
-    // }
+    _renderHeadersListView();
+    _projectView(currentProjectName);
   };
 
   // Adding a class to format tasks differently when they're checked
@@ -223,6 +229,7 @@ let dom = (() => {
     displayProjectOptions,
     displayTaskOptions,
     kanbanView,
+    listView,
   };
 })();
 

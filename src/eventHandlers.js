@@ -13,6 +13,7 @@ let eventHandlers = (() => {
       displayTaskOptions,
       displayProjectOptions,
       kanbanView,
+      listView,
     } = dom;
     const { createTask, addTaskToList } = task;
     const { updateStorage, getStorage } = storage;
@@ -50,6 +51,10 @@ let eventHandlers = (() => {
       }
       if (e.target.classList.contains('editIcon')) {
         // modifyTasks(taskName);
+      }
+      if (e.target.classList.contains('projects')) {
+        let projectName = e.target.textContent;
+        listView(projectName);
       }
     });
 

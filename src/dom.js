@@ -1,9 +1,10 @@
 import task from './task';
-import storage from './storage';
 import elements from './domElements';
+import project from './project';
 
 let dom = (() => {
-  const { createTask, populateTasks, taskFactory } = task;
+  const { allTasksList, createTask, populateTasks, taskFactory } = task;
+  const { projectList } = project;
   const {
     formBackground,
     popupForm,
@@ -64,23 +65,13 @@ let dom = (() => {
   };
 
   const _addProjectToNavMenu = projectName => {
-    const projectNav = divCreator(
-      'div',
-      'projects nav',
-      navProjects,
-      projectName
-    );
+    divCreator('div', 'projects nav', navProjects, projectName);
   };
 
   const _createProjectCard = projectName => {
     const projectCard = divCreator('div', 'projectCard', cardsContainer);
-    const projectTitle = divCreator(
-      'div',
-      'projectTitle',
-      projectCard,
-      projectName
-    );
-    const taskContainer = divCreator('div', 'taskContainer', projectCard);
+    divCreator('div', 'projectTitle', projectCard, projectName);
+    divCreator('div', 'taskContainer', projectCard);
   };
 
   let _createCheckbox = () => {
@@ -105,6 +96,64 @@ let dom = (() => {
     const p = divCreator('p', 'taskText', undefined, newTask.getName());
     task.append(checkbox, p);
     taskContainer.append(task);
+  };
+
+  const _renderListView = task => {
+    const checkbox = createCheckbox();
+    taskViewContainer.append(checkbox);
+    divCreator('div', 'taskText', taskViewContainer, task.getName());
+    divCreator('div', 'dueDate', taskViewContainer, task.getDate());
+    divCreator('div', 'priority', taskViewContainer, task.getPriority());
+    divCreator('div', 'notes', taskViewContainer, task.getNotes());
+    divCreator('svg', 'editIcon', taskViewContainer);
+    checkboxCorrection(task, checkbox);
+  };
+  const renderHeadersListView = () => {
+    divCreator('div', 'taskTitle', taskViewContainer, 'Name');
+    divCreator('div', 'dueDateTitle', taskViewContainer, 'Due');
+    divCreator('div', 'priorityTitle', taskViewContainer, 'Priority');
+    divCreator('div', 'notesTitle', taskViewContainer, 'Notes');
+  };
+
+  //regenerating kanban view
+  const kanbanView = () => {
+    friendsContainer.style.display = 'block';
+    titleText.textContent = 'Your Projects';
+    taskViewContainer.style.display = 'none';
+    // clear what is in the cards container
+    cardsContainer.style.display = 'grid';
+    while (cardsContainer.firstChild) {
+      cardsContainer.removeChild(cardsContainer.firstChild);
+    }
+    // regenerate contents of cards container
+    for (let project of projectList) {
+      _createProjectCard(project);
+    }
+    for (let task of allTasksList) {
+      if (task.getCompletedStatus() === true && clearCompletedTasksBool) {
+        continue; //hide completed tasks if clearCompletedTasksBool is true
+      }
+      renderTask(task);
+    }
+  };
+
+  // all the views except the Kanban view
+  const listView = currentProjectName => {
+    cardsContainer.style.display = 'none'; // clearing the kanban cards
+    friendsContainer.style.display = 'none';
+    titleText.textContent = currentProjectName;
+    taskViewContainer.style.display = 'grid';
+    // clearing any existing tasks
+    while (taskViewContainer.firstChild) {
+      taskViewContainer.removeChild(taskViewContainer.firstChild);
+    } // regenerating headers
+    renderHeadersListView();
+    // if (e.target.classList.contains("projects")) {
+    //   projectView(currentProjectName);
+    // }
+    // if (e.target.classList.contains("logbook")) {
+    //   logbookView();
+    // }
   };
 
   // Adding a class to format tasks differently when they're checked
@@ -152,18 +201,18 @@ let dom = (() => {
   };
 
   let checkboxCorrection = (task, checkbox) => {
-    // if (task.getCompletedStatus() === true) {
-    //   checkbox.click();
-    //   checkbox.classList.add('checked');
-    //   for (const storedTask of allTasksList) {
-    //     if (task.getName() === storedTask.getName()) {
-    //       storedTask.setCompletedStatus(true);
-    //     }
-    //   }
-    // }
-    // if (task.getCompletedStatus() === false) {
-    //   checkbox.classList.remove('checked');
-    // }
+    if (task.getCompletedStatus() === true) {
+      checkbox.click();
+      checkbox.classList.add('checked');
+      for (const storedTask of allTasksList) {
+        if (task.getName() === storedTask.getName()) {
+          storedTask.setCompletedStatus(true);
+        }
+      }
+    }
+    if (task.getCompletedStatus() === false) {
+      checkbox.classList.remove('checked');
+    }
   };
   return {
     displayPopup,
@@ -173,6 +222,7 @@ let dom = (() => {
     toggleChecked,
     displayProjectOptions,
     displayTaskOptions,
+    kanbanView,
   };
 })();
 

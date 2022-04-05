@@ -12,17 +12,17 @@ let eventHandlers = (() => {
       closePopup,
       displayTaskOptions,
       displayProjectOptions,
+      kanbanView,
     } = dom;
     const { createTask, addTaskToList } = task;
     const { updateStorage, getStorage } = storage;
     const { projectExists, updateProjectList } = project;
     document.addEventListener('click', e => {
-      //   console.log(e.target);
       if (e.target.classList.contains('addNewButton')) {
-        displayPopup();
+        displayPopup(); //displays pop-up to add new tasks
       }
       if (e.target.id === 'createButton') {
-        //creating a new task with the popup form
+        //creating a new task with the pop-up form
         e.preventDefault();
         let newTaskArray = [];
         let formInputs = document.querySelectorAll('.input');
@@ -30,7 +30,6 @@ let eventHandlers = (() => {
         let newTask = createTask(newTaskArray);
         addTaskToList(newTask);
         if (!projectExists(newTask)) {
-          console.log('created here');
           renderProject(newTask.getProject());
         }
         updateProjectList(newTask);
@@ -44,10 +43,16 @@ let eventHandlers = (() => {
       }
       if (e.target.id === 'newProjectButton') {
         e.preventDefault();
-
         displayProjectOptions();
       }
+      if (e.target.classList.contains('kanban')) {
+        kanbanView();
+      }
+      if (e.target.classList.contains('editIcon')) {
+        // modifyTasks(taskName);
+      }
     });
+
     document.addEventListener('dblclick', e => {
       console.log(e.target.tagName === 'P');
       //   modifyTasks(taskName);

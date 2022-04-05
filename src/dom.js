@@ -3,15 +3,13 @@ import storage from './storage';
 import elements from './domElements';
 
 let dom = (() => {
-  const { createTask } = task;
+  const { createTask, populateTasks, taskFactory } = task;
   const {
     formBackground,
     popupForm,
     saveChangesButton,
     deleteTaskButton,
     navProjects,
-    newTaskButton,
-    newProjectButton,
     cardsContainer,
     friendsContainer,
     titleText,
@@ -24,6 +22,14 @@ let dom = (() => {
     anytime,
     all,
     overdue,
+    taskName,
+    taskInput,
+    dueDate,
+    notesLabel,
+    notesInput,
+    priorityInput,
+    priorityLabel,
+    dueDateInput,
   } = elements;
 
   let clearCompletedTasksBool = false;
@@ -92,12 +98,12 @@ let dom = (() => {
     const taskContainer = Array.from(titleDivs).find(
       title => title.textContent === newTask.getProject()
     ).nextSibling;
-    // create a new task + append it to project card
-    const task = divCreator('div', 'task', taskContainer);
+    // create a new task + appends it to the project card
+    const task = divCreator('div', 'task');
     const checkbox = _createCheckbox();
     checkboxCorrection(newTask, checkbox);
-    task.append(checkbox);
-    const p = divCreator('p', 'taskText', task, newTask.getName());
+    const p = divCreator('p', 'taskText', undefined, newTask.getName());
+    task.append(checkbox, p);
     taskContainer.append(task);
   };
 
@@ -115,27 +121,34 @@ let dom = (() => {
     deleteTaskButton.style.display = 'none';
   };
 
-  const createNew = () => {
-    let data = {};
-    //need to take form data and create a new task, in tasks not the DOM
-    // const dataList = [
-    //   'taskName',
-    //   'projectName',
-    //   'dueDate',
-    //   'priority',
-    //   'notes',
-    // ];
-    // for (const item of dataList) {
-    //   data[item] = document.getElementById(`${item}`).value;
-    // }
-    // console.log(data);
-    // const newTask = createTask(data); // creates a new task
-    // console.log(newTask.getName());
-    // addTaskToList(newTask); // adds it to allTasksList, the main place projects are stored
-    // dom.updateDOM(newTask);
-    // updateStorage();
-    // popupForm.reset(); // clears form
-    // closePopup();
+  const closePopup = () => {
+    formBackground.style.display = 'none';
+    popupForm.style.display = 'none';
+    popupForm.reset();
+  };
+  const hiddenElements = [
+    taskName,
+    taskInput,
+    dueDate,
+    notesLabel,
+    notesInput,
+    priorityInput,
+    priorityLabel,
+    dueDateInput,
+  ];
+  const displayTaskOptions = ev => {
+    for (const element of hiddenElements) {
+      element.style.display = 'block';
+      newTaskButton.style.backgroundColor = '#fedce6';
+      newProjectButton.style.backgroundColor = 'rgb(239, 241, 250)';
+    }
+  };
+  const displayProjectOptions = ev => {
+    for (const element of hiddenElements) {
+      element.style.display = 'none';
+      newProjectButton.style.backgroundColor = '#fedce6';
+      newTaskButton.style.backgroundColor = 'rgb(239, 241, 250)';
+    }
   };
 
   let checkboxCorrection = (task, checkbox) => {
@@ -153,11 +166,13 @@ let dom = (() => {
     // }
   };
   return {
-    createNew,
     displayPopup,
+    closePopup,
     renderTask,
     renderProject,
     toggleChecked,
+    displayProjectOptions,
+    displayTaskOptions,
   };
 })();
 

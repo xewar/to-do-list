@@ -4,7 +4,7 @@ import task from './task.js';
 
 let storage = (() => {
   'use strict';
-  const { populateTasks, allTasksList } = task;
+  const { populateTasks, allTasksList, addTaskToList } = task;
   const { renderTask, renderProject } = dom;
   const { projectList, updateProjectList } = project;
 

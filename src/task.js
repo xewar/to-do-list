@@ -9,7 +9,7 @@ let task = (() => {
     dueDate,
     priority,
     notes,
-    isCompleted
+    isCompleted = false
   ) => {
     const getName = () => taskName;
     const getDate = () => dueDate;
@@ -22,6 +22,9 @@ let task = (() => {
       } else isCompleted = true;
     };
     const getPriority = () => priority;
+    const getAllTasks = () =>
+      Object.freeze([taskName, project, dueDate, priority, notes, isCompleted]);
+    const toJSON = () => getAllTasks();
 
     return {
       getName,
@@ -31,13 +34,13 @@ let task = (() => {
       getCompletedStatus,
       toggleCompletedStatus,
       getPriority,
+      toJSON,
     };
   };
 
-  const allTasksList = [];
+  let allTasksList = [];
   const addTaskToList = task => {
     allTasksList.push(task);
-    updateProjectList(task);
   };
 
   const updateTaskStatus = taskName => {
@@ -47,12 +50,16 @@ let task = (() => {
       }
     });
   };
+  const createTask = newTaskArray => {
+    return taskFactory(...newTaskArray);
+  };
 
   // populate taskList from storage
   const populateTasks = tasksArray => {
-    for (const taskItem of tasksArray) {
-      const newTask = taskFactory(...taskItem);
-      addTaskToList(newTask); // add the task to the all Tasks List
+    for (let taskItem of tasksArray) {
+      let newTask = createTask(taskItem);
+      addTaskToList(newTask);
+      updateProjectList(newTask);
     }
   };
 
@@ -60,6 +67,7 @@ let task = (() => {
     taskFactory,
     allTasksList,
     addTaskToList,
+    createTask,
     populateTasks,
     updateTaskStatus,
   };

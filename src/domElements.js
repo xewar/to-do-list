@@ -19,6 +19,22 @@ let elements = (() => {
     anytime: document.querySelector('.anytime'),
     all: document.querySelector('.all'),
     overdue: document.querySelector('.overdue'),
+    // // Rendering the pop-up for new tasks or projects
+    formBackground: document.querySelector('.formBackground'),
+    popupForm: document.querySelector('.newProjectForm'),
+    newTaskButton: document.querySelector('#newTaskButton'),
+    newProjectButton: document.querySelector('#newProjectButton'),
+    taskName: document.querySelector("label[for='taskName']"),
+    taskInput: document.querySelector('#taskName'),
+    projectInput: document.querySelector('#projectName'),
+    dueDate: document.querySelector("label[for='dueDate']"),
+    dueDateInput: document.querySelector('#dueDate'),
+    notesLabel: document.querySelector("label[for='notes']"),
+    notesInput: document.querySelector('#notes'),
+    priorityLabel: document.querySelector("label[for='priority']"),
+    priorityInput: document.querySelector('#priority'),
+    saveChangesButton: document.querySelector('#saveChangesButton'),
+    deleteTaskButton: document.querySelector('#deleteTaskButton'),
   };
 })();
 

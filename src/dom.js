@@ -1,6 +1,7 @@
 import task from './task';
 import elements from './domElements';
 import project from './project';
+import { addDays, format, parseISO } from 'date-fns';
 
 let dom = (() => {
   const { allTasksList, createTask, populateTasks, taskFactory } = task;
@@ -35,7 +36,7 @@ let dom = (() => {
 
   let clearCompletedTasksBool = false;
   //modified from https://github.com/noLakes/cabbage/blob/master/src/dom.js
-  let divCreator = (
+  let _divCreator = (
     type,
     className = undefined,
     appendTo = undefined,
@@ -61,25 +62,24 @@ let dom = (() => {
 
   const renderTask = newTask => {
     _renderKanban(newTask);
-    // add it to list view
   };
 
   const _addProjectToNavMenu = projectName => {
-    divCreator('div', 'projects nav', navProjects, projectName);
+    _divCreator('div', 'projects nav', navProjects, projectName);
   };
 
   const _createProjectCard = projectName => {
-    const projectCard = divCreator('div', 'projectCard', cardsContainer);
-    divCreator('div', 'projectTitle', projectCard, projectName);
-    divCreator('div', 'taskContainer', projectCard);
+    const projectCard = _divCreator('div', 'projectCard', cardsContainer);
+    _divCreator('div', 'projectTitle', projectCard, projectName);
+    _divCreator('div', 'taskContainer', projectCard);
   };
 
   let _createCheckbox = () => {
-    const label = divCreator('label', 'checkmark');
+    const label = _divCreator('label', 'checkmark');
     label.name = 'checkbox';
-    const input = divCreator('input', undefined, label);
+    const input = _divCreator('input', undefined, label);
     input.type = 'checkbox';
-    const span = divCreator('span', 'check', label);
+    const span = _divCreator('span', 'check', label);
     return label;
   };
 
@@ -90,10 +90,10 @@ let dom = (() => {
       title => title.textContent === newTask.getProject()
     ).nextSibling;
     // create a new task + appends it to the project card
-    const task = divCreator('div', 'task');
+    const task = _divCreator('div', 'task');
     const checkbox = _createCheckbox();
     checkboxCorrection(newTask, checkbox);
-    const p = divCreator('p', 'taskText', undefined, newTask.getName());
+    const p = _divCreator('p', 'taskText', undefined, newTask.getName());
     task.append(checkbox, p);
     taskContainer.append(task);
   };
@@ -122,21 +122,102 @@ let dom = (() => {
   const _renderTasksListView = task => {
     const checkbox = _createCheckbox();
     taskViewContainer.append(checkbox);
-    divCreator('div', 'taskText', taskViewContainer, task.getName());
-    divCreator('div', 'dueDate', taskViewContainer, task.getDate());
-    divCreator('div', 'priority', taskViewContainer, task.getPriority());
-    divCreator('div', 'notes', taskViewContainer, task.getNotes());
-    divCreator('svg', 'editIcon', taskViewContainer);
+    _divCreator('div', 'taskText', taskViewContainer, task.getName());
+    _divCreator('div', 'dueDate', taskViewContainer, task.getDate());
+    _divCreator('div', 'priority', taskViewContainer, task.getPriority());
+    _divCreator('div', 'notes', taskViewContainer, task.getNotes());
+    _divCreator('svg', 'editIcon', taskViewContainer);
     checkboxCorrection(task, checkbox);
   };
   const _renderHeadersListView = () => {
-    divCreator('div', 'taskTitle', taskViewContainer, 'Name');
-    divCreator('div', 'dueDateTitle', taskViewContainer, 'Due');
-    divCreator('div', 'priorityTitle', taskViewContainer, 'Priority');
-    divCreator('div', 'notesTitle', taskViewContainer, 'Notes');
+    _divCreator('div', 'taskTitle', taskViewContainer, 'Name');
+    _divCreator('div', 'dueDateTitle', taskViewContainer, 'Due');
+    _divCreator('div', 'priorityTitle', taskViewContainer, 'Priority');
+    _divCreator('div', 'notesTitle', taskViewContainer, 'Notes');
+  };
+  function padToTwo(number) {
+    return number > 9 ? number : `0${number}`;
+  }
+  const timeZoneOffset = date => {
+    const year = date.getUTCFullYear();
+    const month = date.getUTCMonth() + 1; // Date provides month index; not month number
+    const day = date.getUTCDate();
+    return `${year}-${padToTwo(month)}-${padToTwo(day)}`;
+  };
+  const logbookView = () => {
+    titleText.textContent = 'Logbook';
+    for (const task of allTasksList) {
+      if (task.getCompletedStatus() === true) {
+        _renderTasksListView(task);
+      }
+    }
+  };
+  const todayView = () => {
+    let today = new Date();
+    today = format(today, 'yyyy-MM-dd');
+    for (const task of allTasksList) {
+      if (task.getCompletedStatus() === true && clearCompletedTasksBool) {
+        continue;
+      }
+      let taskDate = new Date(task.getDate());
+      taskDate = timeZoneOffset(taskDate);
+      if (taskDate === today) {
+        _renderTasksListView(task);
+      }
+    }
+  };
+  const upcomingView = () => {
+    let today = new Date();
+    let upcoming = addDays(today, 7);
+    upcoming = format(upcoming, 'yyyy-MM-dd');
+    today = format(today, 'yyyy-MM-dd');
+    for (const task of allTasksList) {
+      if (task.getCompletedStatus() === true && clearCompletedTasksBool) {
+        continue;
+      }
+      let taskDate = new Date(task.getDate());
+      taskDate = timeZoneOffset(taskDate);
+      if (taskDate < upcoming && taskDate > today) {
+        // due in the next five days
+        _renderTasksListView(task);
+      }
+    }
+  };
+  const anytimeView = () => {
+    for (const task of allTasksList) {
+      if (task.getCompletedStatus() === true && clearCompletedTasksBool) {
+        continue;
+      }
+      if (task.getDate() === '') {
+        _renderTasksListView(task);
+      }
+    }
+  };
+  const allView = () => {
+    for (const task of allTasksList) {
+      if (task.getCompletedStatus() === true && clearCompletedTasksBool) {
+        continue;
+      }
+      _renderTasksListView(task);
+    }
+  };
+  const overdueView = () => {
+    let today = new Date();
+    today = format(today, 'yyyy-MM-dd');
+    for (const task of allTasksList) {
+      if (task.getCompletedStatus() === true && clearCompletedTasksBool) {
+        continue;
+      }
+      let taskDate = new Date(task.getDate());
+      taskDate = timeZoneOffset(taskDate);
+      if (taskDate < today) {
+        _renderTasksListView(task);
+      }
+    }
   };
   // click on the projects to dynamically generate and view the tasks for each project
-  const _projectView = currentProjectName => {
+  const projectView = currentProjectName => {
+    titleText.textContent = currentProjectName;
     for (const task of allTasksList) {
       // regenerating tasks
       if (task.getCompletedStatus() === true && clearCompletedTasksBool) {
@@ -150,16 +231,15 @@ let dom = (() => {
 
   // all the views except the Kanban view
   const listView = currentProjectName => {
+    // titleText.textContent = currentProjectName;
     cardsContainer.style.display = 'none'; // clearing the kanban cards
     friendsContainer.style.display = 'none';
-    titleText.textContent = currentProjectName;
     taskViewContainer.style.display = 'grid';
     // clearing any existing tasks
     while (taskViewContainer.firstChild) {
       taskViewContainer.removeChild(taskViewContainer.firstChild);
     }
     _renderHeadersListView(); // regenerating headers
-    _projectView(currentProjectName); //adding the project's tasks
   };
 
   // Adding a class to format tasks differently when they're checked
@@ -207,6 +287,7 @@ let dom = (() => {
   };
 
   let checkboxCorrection = (task, checkbox) => {
+    console.log('checkboxCorrected here');
     if (task.getCompletedStatus() === true) {
       checkbox.click();
       checkbox.classList.add('checked');
@@ -230,6 +311,13 @@ let dom = (() => {
     displayTaskOptions,
     kanbanView,
     listView,
+    projectView,
+    logbookView,
+    todayView,
+    upcomingView,
+    anytimeView,
+    allView,
+    overdueView,
   };
 })();
 

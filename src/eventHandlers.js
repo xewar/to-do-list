@@ -14,6 +14,13 @@ let eventHandlers = (() => {
       displayProjectOptions,
       kanbanView,
       listView,
+      logbookView,
+      projectView,
+      todayView,
+      upcomingView,
+      anytimeView,
+      allView,
+      overdueView,
     } = dom;
     const { createTask, addTaskToList } = task;
     const { updateStorage, getStorage } = storage;
@@ -52,9 +59,33 @@ let eventHandlers = (() => {
       if (e.target.classList.contains('editIcon')) {
         // modifyTasks(taskName);
       }
+      if (e.target.classList.contains('nav')) {
+        if (!e.target.classList.contains('kanban')) {
+          listView(projectName);
+        }
+      }
       if (e.target.classList.contains('projects')) {
         let projectName = e.target.textContent;
-        listView(projectName);
+        projectView(projectName);
+      }
+
+      if (e.target.classList.contains('logbook')) {
+        logbookView();
+      }
+      if (e.target.classList.contains('all')) {
+        allView();
+      }
+      if (e.target.classList.contains('today')) {
+        todayView();
+      }
+      if (e.target.classList.contains('overdue')) {
+        overdueView();
+      }
+      if (e.target.classList.contains('anytime')) {
+        anytimeView();
+      }
+      if (e.target.classList.contains('upcoming')) {
+        upcomingView();
       }
     });
 

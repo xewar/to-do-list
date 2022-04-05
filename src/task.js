@@ -16,6 +16,7 @@ let task = (() => {
     const getProject = () => project;
     const getNotes = () => notes;
     const getCompletedStatus = () => isCompleted;
+    const setCompletedStatus = bool => (isCompleted = bool);
     const toggleCompletedStatus = () => {
       if (isCompleted === true) {
         isCompleted = false;
@@ -32,6 +33,7 @@ let task = (() => {
       getProject,
       getNotes,
       getCompletedStatus,
+      setCompletedStatus,
       toggleCompletedStatus,
       getPriority,
       toJSON,

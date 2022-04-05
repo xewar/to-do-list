@@ -662,8 +662,8 @@ label .check:after {
   height: 25px;
   width: 25px;
   background-repeat: no-repeat;
-  filter: invert(77%) sepia(60%) saturate(561%) hue-rotate(291deg)
-    brightness(103%) contrast(101%);
+  filter: invert(81%) sepia(21%) saturate(701%) hue-rotate(187deg)
+    brightness(102%) contrast(99%);
 }
 
 .alertBell {

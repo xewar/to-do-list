@@ -157,9 +157,9 @@ let dom = (() => {
     // clearing any existing tasks
     while (taskViewContainer.firstChild) {
       taskViewContainer.removeChild(taskViewContainer.firstChild);
-    } // regenerating headers
-    _renderHeadersListView();
-    _projectView(currentProjectName);
+    }
+    _renderHeadersListView(); // regenerating headers
+    _projectView(currentProjectName); //adding the project's tasks
   };
 
   // Adding a class to format tasks differently when they're checked

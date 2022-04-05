@@ -2,6 +2,7 @@ import task from './task';
 import storage from './storage';
 import dom from './dom';
 import project from './project';
+import elements from './domElements';
 
 let eventHandlers = (() => {
   let clickHandler = () => {
@@ -61,6 +62,7 @@ let eventHandlers = (() => {
       }
       if (e.target.classList.contains('nav')) {
         if (!e.target.classList.contains('kanban')) {
+          let projectName = e.target.textContent;
           listView(projectName);
         }
       }
@@ -99,10 +101,18 @@ let eventHandlers = (() => {
     const { updateTaskStatus } = task;
     const { toggleChecked } = dom;
     const { updateStorage } = storage;
+    const { titleText } = elements;
     document.addEventListener('change', e => {
       if (e.target.type === 'checkbox') {
         let label = e.target.parentElement;
-        let taskName = e.target.parentElement.parentElement.textContent;
+        let taskName = '';
+        if (titleText.textContent === 'Your Projects') {
+          taskName = e.target.parentElement.parentElement.textContent;
+          // console.log(taskName);
+        } else {
+          taskName = e.target.parentElement.nextSibling.textContent;
+          // console.log('there', taskName);
+        }
         toggleChecked(label);
         updateTaskStatus(taskName);
         updateStorage();

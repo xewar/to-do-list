@@ -49,6 +49,11 @@ let task = (() => {
     allTasksList.forEach(task => {
       if (task.getName() === taskName) {
         task.toggleCompletedStatus();
+        console.log(
+          task.getName(),
+          'new status is:',
+          task.getCompletedStatus()
+        );
       }
     });
   };

@@ -121,13 +121,13 @@ let dom = (() => {
 
   const _renderTasksListView = task => {
     const checkbox = _createCheckbox();
+    checkboxCorrection(task, checkbox);
     taskViewContainer.append(checkbox);
     _divCreator('div', 'taskText', taskViewContainer, task.getName());
     _divCreator('div', 'dueDate', taskViewContainer, task.getDate());
     _divCreator('div', 'priority', taskViewContainer, task.getPriority());
     _divCreator('div', 'notes', taskViewContainer, task.getNotes());
     _divCreator('svg', 'editIcon', taskViewContainer);
-    checkboxCorrection(task, checkbox);
   };
   const _renderHeadersListView = () => {
     _divCreator('div', 'taskTitle', taskViewContainer, 'Name');
@@ -231,7 +231,7 @@ let dom = (() => {
 
   // all the views except the Kanban view
   const listView = currentProjectName => {
-    // titleText.textContent = currentProjectName;
+    titleText.textContent = currentProjectName;
     cardsContainer.style.display = 'none'; // clearing the kanban cards
     friendsContainer.style.display = 'none';
     taskViewContainer.style.display = 'grid';
@@ -287,7 +287,6 @@ let dom = (() => {
   };
 
   let checkboxCorrection = (task, checkbox) => {
-    console.log('checkboxCorrected here');
     if (task.getCompletedStatus() === true) {
       checkbox.click();
       checkbox.classList.add('checked');

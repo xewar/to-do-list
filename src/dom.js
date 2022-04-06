@@ -5,7 +5,7 @@ import { addDays, format, parseISO } from 'date-fns';
 
 let dom = (() => {
   const { allTasksList, createTask, populateTasks, taskFactory } = task;
-  const { projectList } = project;
+  const { projectList, projectExists } = project;
   const {
     formBackground,
     popupForm,
@@ -26,6 +26,7 @@ let dom = (() => {
     overdue,
     taskName,
     taskInput,
+    projectInput,
     dueDate,
     notesLabel,
     notesInput,
@@ -126,7 +127,9 @@ let dom = (() => {
     _divCreator('div', 'taskText', taskViewContainer, task.getName());
     _divCreator('div', 'dueDate', taskViewContainer, task.getDate());
     _divCreator('div', 'priority', taskViewContainer, task.getPriority());
-    _divCreator('div', 'notes', taskViewContainer, task.getNotes());
+    let notes = _divCreator('div', 'notes', undefined, task.getNotes());
+    // notes.contentEditable = true; //can revisit to make notes editable with an input event listener
+    taskViewContainer.append(notes);
     _divCreator('svg', 'editIcon', taskViewContainer);
   };
   const _renderHeadersListView = () => {
@@ -300,6 +303,82 @@ let dom = (() => {
       checkbox.classList.remove('checked');
     }
   };
+  const toggleCompleted = () => {
+    clearCompletedTasksBool === false
+      ? (clearCompletedTasksBool = true)
+      : (clearCompletedTasksBool = false);
+    reloadPage();
+  };
+  const reloadPage = () => {
+    let pageName = document.querySelector('.titleText').textContent;
+    if (pageName === 'Your Projects') {
+      pageName = 'Kanban';
+    }
+    const navPages = document.querySelectorAll('.nav');
+    navPages.forEach(page => {
+      if (page.textContent === pageName) {
+        page.click();
+      }
+    });
+  };
+
+  let modifiedTaskName = '';
+  let modifyTasks = taskName => {
+    displayPopup();
+    // show the save and delete buttons but hide the new task/new project buttons
+    saveChangesButton.style.display = 'block';
+    deleteTaskButton.style.display = 'block';
+    createButton.style.display = 'none';
+    newTaskButton.style.display = 'none';
+    newProjectButton.style.display = 'none';
+    // let taskName = taskName
+    modifiedTaskName = taskName;
+    // populate the form with the task info so that it can be saved or deleted
+    taskInput.value = taskName;
+    let currentTask = '';
+    for (const task of allTasksList) {
+      // find the other information about the task
+      if (taskName === task.getName()) {
+        currentTask = task;
+      }
+    }
+    projectInput.value = currentTask.getProject();
+    const dueDate = parseISO(currentTask.getDate());
+    const formattedDate = format(dueDate, 'yyyy-MM-dd');
+    dueDateInput.value = formattedDate;
+    priorityInput.value = currentTask.getPriority();
+    notesInput.value = currentTask.getNotes();
+  };
+  const saveChanges = e => {
+    for (const task of allTasksList) {
+      // update the information in the allTasksList
+      if (task.getName() === modifiedTaskName) {
+        console.log('here', modifiedTaskName);
+        task.setName(taskInput.value);
+        task.setProject(projectInput.value);
+        task.setDate(dueDateInput.value);
+        task.setPriority(priorityInput.value);
+        task.setNotes(notesInput.value);
+      }
+    } // regenerate the Project menu to add any new projects
+    if (projectList.indexOf(projectInput.value) === -1) {
+      projectList.push(projectInput.value);
+      renderProject(projectInput.value);
+    }
+    reloadPage();
+  };
+
+  const deleteTasks = () => {
+    const taskName = taskInput.value;
+    // look for the task and delete it
+    for (const index in allTasksList) {
+      if (allTasksList[index].getName() === taskName) {
+        allTasksList.splice(index, 1);
+      }
+    }
+    reloadPage();
+  };
+
   return {
     displayPopup,
     closePopup,
@@ -317,6 +396,10 @@ let dom = (() => {
     anytimeView,
     allView,
     overdueView,
+    toggleCompleted,
+    modifyTasks,
+    saveChanges,
+    deleteTasks,
   };
 })();
 

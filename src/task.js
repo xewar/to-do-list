@@ -12,9 +12,13 @@ let task = (() => {
     isCompleted = false
   ) => {
     const getName = () => taskName;
+    const setName = newName => (taskName = newName);
     const getDate = () => dueDate;
+    const setDate = newDate => (dueDate = newDate);
     const getProject = () => project;
+    const setProject = newProject => (project = newProject);
     const getNotes = () => notes;
+    const setNotes = newNotes => (notes = newNotes);
     const getCompletedStatus = () => isCompleted;
     const setCompletedStatus = bool => (isCompleted = bool);
     const toggleCompletedStatus = () => {
@@ -23,6 +27,7 @@ let task = (() => {
       } else isCompleted = true;
     };
     const getPriority = () => priority;
+    const setPriority = newPriority => (priority = newPriority);
     const getAllTasks = () =>
       Object.freeze([taskName, project, dueDate, priority, notes, isCompleted]);
     const toJSON = () => getAllTasks();
@@ -32,6 +37,11 @@ let task = (() => {
       getDate,
       getProject,
       getNotes,
+      setName,
+      setProject,
+      setNotes,
+      setDate,
+      setPriority,
       getCompletedStatus,
       setCompletedStatus,
       toggleCompletedStatus,

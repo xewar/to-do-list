@@ -22,6 +22,10 @@ let eventHandlers = (() => {
       anytimeView,
       allView,
       overdueView,
+      toggleCompleted,
+      modifyTasks,
+      saveChanges,
+      deleteTasks,
     } = dom;
     const { createTask, addTaskToList } = task;
     const { updateStorage, getStorage } = storage;
@@ -58,7 +62,10 @@ let eventHandlers = (() => {
         kanbanView();
       }
       if (e.target.classList.contains('editIcon')) {
-        // modifyTasks(taskName);
+        let taskName =
+          e.target.previousSibling.previousSibling.previousSibling
+            .previousSibling.textContent;
+        modifyTasks(taskName);
       }
       if (e.target.classList.contains('nav')) {
         if (!e.target.classList.contains('kanban')) {
@@ -89,11 +96,28 @@ let eventHandlers = (() => {
       if (e.target.classList.contains('upcoming')) {
         upcomingView();
       }
+      if (e.target.classList.contains('clearButton')) {
+        toggleCompleted();
+      }
+      if (e.target.id === 'saveChangesButton') {
+        e.preventDefault();
+        saveChanges(e);
+        updateStorage();
+        closePopup();
+      }
+      if (e.target.id === 'deleteTaskButton') {
+        e.preventDefault();
+        deleteTasks();
+        updateStorage();
+        closePopup();
+      }
     });
 
     document.addEventListener('dblclick', e => {
       console.log(e.target.tagName === 'P');
       //   modifyTasks(taskName);
+      if (e.target.classList.contains('notes')) {
+      }
     });
   };
   let changeHandler = () => {
@@ -108,10 +132,8 @@ let eventHandlers = (() => {
         let taskName = '';
         if (titleText.textContent === 'Your Projects') {
           taskName = e.target.parentElement.parentElement.textContent;
-          // console.log(taskName);
         } else {
           taskName = e.target.parentElement.nextSibling.textContent;
-          // console.log('there', taskName);
         }
         toggleChecked(label);
         updateTaskStatus(taskName);

@@ -17,6 +17,7 @@ let project = (() => {
     projectExists,
     projectList,
     updateProjectList,
+    deleteProject,
   };
 })();
 

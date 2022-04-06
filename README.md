@@ -32,9 +32,10 @@ View the live project [here]()
 
 **Potential future updates:**
 
-- Ability to change theme color
-- Add ability to set repeating tasks (daily, etc.)
+- Delete + archive projects
+- Another color theme
+- Set repeating tasks (daily, etc.)
 - Sort by priority and date
-- Add a notes page with stickies you can edit
-- Ability to search
+- A notes page with stickies you can edit
+- Search for tasks
 - Login and ability to connect to friends

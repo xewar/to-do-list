@@ -34,7 +34,7 @@ let eventHandlers = (() => {
       setCurrentTask,
       deleteTasks,
     } = task;
-    const { projectInput } = elements;
+    const { projectInput, taskInput } = elements;
     const { updateStorage } = storage;
     const { projectExists, updateProjectList } = project;
     document.addEventListener('click', e => {
@@ -44,16 +44,23 @@ let eventHandlers = (() => {
       if (e.target.id === 'createButton') {
         //creating a new task with the pop-up form
         e.preventDefault();
-        let newTaskArray = [];
-        let formInputs = document.querySelectorAll('.input');
-        formInputs.forEach(input => newTaskArray.push(input.value));
-        let newTask = createTask(newTaskArray);
-        addTaskToList(newTask);
-        if (!projectExists(newTask)) {
-          renderProject(newTask.getProject());
+        if (taskInput.value === '') {
+          let projectName = projectInput.value;
+          if (!projectExists(projectName)) {
+            updateProjectList, renderProject(projectName);
+          }
+        } else {
+          let newTaskArray = [];
+          let formInputs = document.querySelectorAll('.input');
+          formInputs.forEach(input => newTaskArray.push(input.value));
+          let newTask = createTask(newTaskArray);
+          addTaskToList(newTask);
+          if (!projectExists(newTask.getProject())) {
+            renderProject(newTask.getProject());
+          }
+          updateProjectList(newTask.getProject());
+          renderTask(newTask);
         }
-        updateProjectList(newTask);
-        renderTask(newTask);
         closePopup();
         updateStorage();
       }
@@ -126,7 +133,6 @@ let eventHandlers = (() => {
         reloadPage();
       }
       if (e.target.classList.contains('showNavMenu')) {
-        console.log('hello');
         toggleMenuDisplay();
       }
     });

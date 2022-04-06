@@ -55,7 +55,18 @@ let dom = (() => {
   };
 
   const renderTask = newTask => {
-    _renderKanban(newTask);
+    //find the correct project card to update
+    const titleDivs = document.querySelectorAll('.projectTitle');
+    const taskContainer = Array.from(titleDivs).find(
+      title => title.textContent === newTask.getProject()
+    ).nextSibling;
+    // create a new task + appends it to the project card
+    const task = _divCreator('div', 'task');
+    const checkbox = _createCheckbox();
+    checkboxCorrection(newTask, checkbox);
+    const p = _divCreator('p', 'taskText', undefined, newTask.getName());
+    task.append(checkbox, p);
+    taskContainer.append(task);
   };
 
   const _addProjectToNavMenu = projectName => {
@@ -77,20 +88,6 @@ let dom = (() => {
     return label;
   };
 
-  const _renderKanban = newTask => {
-    //find the correct project card to update
-    const titleDivs = document.querySelectorAll('.projectTitle');
-    const taskContainer = Array.from(titleDivs).find(
-      title => title.textContent === newTask.getProject()
-    ).nextSibling;
-    // create a new task + appends it to the project card
-    const task = _divCreator('div', 'task');
-    const checkbox = _createCheckbox();
-    checkboxCorrection(newTask, checkbox);
-    const p = _divCreator('p', 'taskText', undefined, newTask.getName());
-    task.append(checkbox, p);
-    taskContainer.append(task);
-  };
   //regenerating kanban view
   const kanbanView = () => {
     friendsContainer.style.display = 'block';
@@ -220,6 +217,7 @@ let dom = (() => {
         continue;
       }
       if (task.getProject() === currentProjectName) {
+        console.log(task.getName());
         _renderTasksListView(task);
       }
     }

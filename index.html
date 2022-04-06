@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To Do List</title>
+    <script defer src="main.js"></script>
+  </head>
+  <body>
+    <div class="left">
+      <div class="showNavMenu">&#10094;</div>
+      <h1 class="title">To Do List</h1>
+      <div class="navContainer">
+        <div class="navViews navSection">
+          <div class="nav kanban">Kanban</div>
+          <div class="nav dateView all">All</div>
+          <div class="nav dateView today">Today</div>
+          <div class="nav dateView upcoming">Upcoming</div>
+          <div class="nav dateView anytime">Anytime</div>
+          <div class="nav dateView overdue">Overdue</div>
+        </div>
+        <div class="nav logbook">Logbook</div>
+        <div class="navProjects navSection"></div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="formBackground"></div>
+      <div class="search">
+        <div class="searchIcon"></div>
+        <input type="text" class="searchBar" />
+      </div>
+
+      <div class="account">
+        <div class="alertBell"></div>
+        <div class="avatar smallerAvatar"></div>
+        <div class="username">Xewar</div>
+      </div>
+      <div class="rowTwo">
+        <div class="avatar"></div>
+        <div class="greeting">Hi there!</div>
+        <div class="avatarBackground"></div>
+      </div>
+      <div class="mainContainer">
+        <div class="mainContainerTop">
+          <div class="titleText">Your Projects</div>
+          <button class="addNewButton">+ New</button>
+          <form class="newProjectForm" id="newProject">
+            <button class="closeButton">&#9747;</button>
+            <button id="newTaskButton">New Task</button>
+            <button id="newProjectButton">New Project</button>
+            <label for="taskName">To-do</label>
+            <input type="text" class="input" id="taskName" name="taskName" />
+            <label for="projectName">Project Name</label>
+            <input
+              type="text"
+              class="input"
+              id="projectName"
+              name="projectName"
+            />
+            <label for="dueDate">Due</label>
+            <input type="date" class="input" id="dueDate" name="dueDate" />
+            <label for="priority">Priority</label>
+            <select name="priority" class="input" id="priority">
+              <option></option>
+              <option value="high">High</option>
+              <option value="medium">Medium</option>
+              <option value="low">Low</option>
+            </select>
+            <label for="notes">Notes</label>
+            <textarea id="notes" class="input" name="notes"></textarea>
+            <button
+              type="submit"
+              id="createButton"
+              class="popupButton createButton"
+            >
+              + Create
+            </button>
+            <button type="submit" id="saveChangesButton" class="popupButton">
+              Save Changes
+            </button>
+            <button type="submit" id="deleteTaskButton" class="popupButton">
+              Delete
+            </button>
+          </form>
+        </div>
+        <div class="cardsContainer"></div>
+        <div class="friendsContainer">
+          <div class="friendsContainerTitle">Friends</div>
+          <div class="friends">
+            <div class="friend">
+              <div class="user naserian"></div>
+              <div class="user">@naserian</div>
+            </div>
+            <div class="friend">
+              <div class="user chanlina"></div>
+              <div class="user">@chanlina</div>
+            </div>
+            <div class="friend">
+              <div class="user noura"></div>
+              <div class="user">@noura</div>
+            </div>
+          </div>
+        </div>
+        <div class="taskViewContainer"></div>
+      </div>
+      <div class="footer">
+        <!-- <button class="colorButton">&#x394; Color</button> -->
+        <button class="colorButton clearButton">
+          <svg class="clearCompleted"></svg>Toggle Completed
+        </button>
+        <!-- <div class="footerText">made with <span class="heart">&#9825;</span> by xewar</div> -->
+      </div>
+    </div>
+  </body>
+</html>

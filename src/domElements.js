@@ -35,6 +35,7 @@ let elements = (() => {
     priorityInput: document.querySelector('#priority'),
     saveChangesButton: document.querySelector('#saveChangesButton'),
     deleteTaskButton: document.querySelector('#deleteTaskButton'),
+    navContainer: document.querySelector('.navContainer'),
   };
 })();
 

@@ -1,8 +1,10 @@
 import project from './project';
-// import storage from './storage.js';
-// const { updateStorage } = storage;
+import elements from './domElements';
+
 let task = (() => {
-  const { updateProjectList } = project;
+  const { updateProjectList, projectExists } = project;
+  const { taskInput, projectInput, notesInput, priorityInput, dueDateInput } =
+    elements;
   const taskFactory = (
     taskName,
     project,
@@ -59,16 +61,38 @@ let task = (() => {
     allTasksList.forEach(task => {
       if (task.getName() === taskName) {
         task.toggleCompletedStatus();
-        console.log(
-          task.getName(),
-          'new status is:',
-          task.getCompletedStatus()
-        );
       }
     });
   };
+  const saveChanges = () => {
+    for (const task of allTasksList) {
+      // update the information in the allTasksList
+      if (task.getName() === getCurrentTask()) {
+        task.setName(taskInput.value);
+        task.setProject(projectInput.value);
+        task.setDate(dueDateInput.value);
+        task.setPriority(priorityInput.value);
+        task.setNotes(notesInput.value);
+      }
+    }
+  };
+  let currentTask = '';
+  const setCurrentTask = taskName => {
+    currentTask = taskName;
+  };
+  const getCurrentTask = () => currentTask;
   const createTask = newTaskArray => {
     return taskFactory(...newTaskArray);
+  };
+
+  const deleteTasks = () => {
+    const taskName = taskInput.value;
+    // look for the task and delete it
+    for (const index in allTasksList) {
+      if (allTasksList[index].getName() === taskName) {
+        allTasksList.splice(index, 1);
+      }
+    }
   };
 
   // populate taskList from storage
@@ -76,7 +100,7 @@ let task = (() => {
     for (let taskItem of tasksArray) {
       let newTask = createTask(taskItem);
       addTaskToList(newTask);
-      updateProjectList(newTask);
+      updateProjectList(newTask.getProject());
     }
   };
 
@@ -87,6 +111,10 @@ let task = (() => {
     createTask,
     populateTasks,
     updateTaskStatus,
+    saveChanges,
+    setCurrentTask,
+    getCurrentTask,
+    deleteTasks,
   };
 })();
 

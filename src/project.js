@@ -1,14 +1,14 @@
 import task from './task';
 let project = (() => {
   let projectList = [];
-  const updateProjectList = newTask => {
-    if (!projectExists(newTask)) {
-      projectList.push(newTask.getProject());
+  const updateProjectList = projectName => {
+    if (!projectExists(projectName)) {
+      projectList.push(projectName);
     }
   };
-  const projectExists = newTask => {
+  const projectExists = projectName => {
     //returns true if project exists
-    return projectList.indexOf(newTask.getProject()) !== -1;
+    return projectList.indexOf(projectName) !== -1;
   };
   return {
     projectExists,

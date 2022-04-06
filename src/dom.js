@@ -16,14 +16,6 @@ let dom = (() => {
     friendsContainer,
     titleText,
     taskViewContainer,
-    createBB,
-    dateViews,
-    logbook,
-    today,
-    upcoming,
-    anytime,
-    all,
-    overdue,
     taskName,
     taskInput,
     projectInput,
@@ -33,6 +25,7 @@ let dom = (() => {
     priorityInput,
     priorityLabel,
     dueDateInput,
+    navContainer,
   } = elements;
 
   let clearCompletedTasksBool = false;
@@ -274,14 +267,14 @@ let dom = (() => {
     priorityLabel,
     dueDateInput,
   ];
-  const displayTaskOptions = ev => {
+  const displayTaskOptions = () => {
     for (const element of hiddenElements) {
       element.style.display = 'block';
       newTaskButton.style.backgroundColor = '#fedce6';
       newProjectButton.style.backgroundColor = 'rgb(239, 241, 250)';
     }
   };
-  const displayProjectOptions = ev => {
+  const displayProjectOptions = () => {
     for (const element of hiddenElements) {
       element.style.display = 'none';
       newProjectButton.style.backgroundColor = '#fedce6';
@@ -322,7 +315,6 @@ let dom = (() => {
     });
   };
 
-  let modifiedTaskName = '';
   let modifyTasks = taskName => {
     displayPopup();
     // show the save and delete buttons but hide the new task/new project buttons
@@ -332,7 +324,6 @@ let dom = (() => {
     newTaskButton.style.display = 'none';
     newProjectButton.style.display = 'none';
     // let taskName = taskName
-    modifiedTaskName = taskName;
     // populate the form with the task info so that it can be saved or deleted
     taskInput.value = taskName;
     let currentTask = '';
@@ -348,35 +339,15 @@ let dom = (() => {
     dueDateInput.value = formattedDate;
     priorityInput.value = currentTask.getPriority();
     notesInput.value = currentTask.getNotes();
-  };
-  const saveChanges = e => {
-    for (const task of allTasksList) {
-      // update the information in the allTasksList
-      if (task.getName() === modifiedTaskName) {
-        console.log('here', modifiedTaskName);
-        task.setName(taskInput.value);
-        task.setProject(projectInput.value);
-        task.setDate(dueDateInput.value);
-        task.setPriority(priorityInput.value);
-        task.setNotes(notesInput.value);
-      }
-    } // regenerate the Project menu to add any new projects
-    if (projectList.indexOf(projectInput.value) === -1) {
-      projectList.push(projectInput.value);
-      renderProject(projectInput.value);
-    }
-    reloadPage();
+    return modifiedTaskName;
   };
 
-  const deleteTasks = () => {
-    const taskName = taskInput.value;
-    // look for the task and delete it
-    for (const index in allTasksList) {
-      if (allTasksList[index].getName() === taskName) {
-        allTasksList.splice(index, 1);
-      }
+  const toggleMenuDisplay = () => {
+    if (navContainer.classList.contains('displayContainer')) {
+      navContainer.classList.remove('displayContainer');
+    } else {
+      navContainer.classList.add('displayContainer');
     }
-    reloadPage();
   };
 
   return {
@@ -398,8 +369,8 @@ let dom = (() => {
     overdueView,
     toggleCompleted,
     modifyTasks,
-    saveChanges,
-    deleteTasks,
+    reloadPage,
+    toggleMenuDisplay,
   };
 })();
 

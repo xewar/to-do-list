@@ -24,11 +24,18 @@ let eventHandlers = (() => {
       overdueView,
       toggleCompleted,
       modifyTasks,
-      saveChanges,
-      deleteTasks,
+      reloadPage,
+      toggleMenuDisplay,
     } = dom;
-    const { createTask, addTaskToList } = task;
-    const { updateStorage, getStorage } = storage;
+    const {
+      createTask,
+      addTaskToList,
+      saveChanges,
+      setCurrentTask,
+      deleteTasks,
+    } = task;
+    const { projectInput } = elements;
+    const { updateStorage } = storage;
     const { projectExists, updateProjectList } = project;
     document.addEventListener('click', e => {
       if (e.target.classList.contains('addNewButton')) {
@@ -65,6 +72,7 @@ let eventHandlers = (() => {
         let taskName =
           e.target.previousSibling.previousSibling.previousSibling
             .previousSibling.textContent;
+        setCurrentTask(taskName);
         modifyTasks(taskName);
       }
       if (e.target.classList.contains('nav')) {
@@ -101,15 +109,25 @@ let eventHandlers = (() => {
       }
       if (e.target.id === 'saveChangesButton') {
         e.preventDefault();
-        saveChanges(e);
+        saveChanges();
+        let projectName = projectInput.value;
+        if (!projectExists(projectName)) {
+          updateProjectList, renderProject(projectName);
+        }
         updateStorage();
         closePopup();
+        reloadPage();
       }
       if (e.target.id === 'deleteTaskButton') {
         e.preventDefault();
         deleteTasks();
         updateStorage();
         closePopup();
+        reloadPage();
+      }
+      if (e.target.classList.contains('showNavMenu')) {
+        console.log('hello');
+        toggleMenuDisplay();
       }
     });
 

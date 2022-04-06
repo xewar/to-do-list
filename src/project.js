@@ -6,6 +6,9 @@ let project = (() => {
       projectList.push(projectName);
     }
   };
+  const deleteProject = projectName => {
+    projectList = projectList.filter(value => value != projectName);
+  };
   const projectExists = projectName => {
     //returns true if project exists
     return projectList.indexOf(projectName) !== -1;

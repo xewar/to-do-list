@@ -4,8 +4,8 @@ import project from './project';
 import { addDays, format, parseISO } from 'date-fns';
 
 let dom = (() => {
-  const { allTasksList, createTask, populateTasks, taskFactory } = task;
-  const { projectList, projectExists } = project;
+  const { allTasksList } = task;
+  const { projectList, deleteProject } = project;
   const {
     formBackground,
     popupForm,
@@ -217,7 +217,6 @@ let dom = (() => {
         continue;
       }
       if (task.getProject() === currentProjectName) {
-        console.log(task.getName());
         _renderTasksListView(task);
       }
     }
@@ -254,6 +253,7 @@ let dom = (() => {
     formBackground.style.display = 'none';
     popupForm.style.display = 'none';
     popupForm.reset();
+    clearEmptyProjects();
   };
   const hiddenElements = [
     taskName,
@@ -345,6 +345,21 @@ let dom = (() => {
       navContainer.classList.remove('displayContainer');
     } else {
       navContainer.classList.add('displayContainer');
+    }
+  };
+  const clearEmptyProjects = () => {
+    for (const project of navProjects.children) {
+      let numberOfTasks = 0;
+      const projectName = project.textContent;
+      for (const task of allTasksList) {
+        if (task.getProject() === projectName) {
+          numberOfTasks++;
+        }
+      }
+      if (numberOfTasks === 0) {
+        project.remove();
+        deleteProject(project);
+      }
     }
   };
 

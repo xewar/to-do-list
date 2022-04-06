@@ -5,5 +5,5 @@ import eventHandlers from './eventHandlers';
 eventHandlers.clickHandler();
 eventHandlers.changeHandler();
 
-localStorage.clear();
+// localStorage.clear();
 storage.getStorage();

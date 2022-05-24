@@ -1,10 +1,10 @@
 
 
-<a href="https://xewar.github.io/to-do/">
+<a href="https://xewar.github.io/to-do-list/">
 <img src="https://github.com/xewar/projectThumbnails/blob/56f419dd9d1148b3ac97cc690b6df82e6c90136e/todoList.png" width="500"></a>
 
 
-View the live project [here](https://xewar.github.io/to-do/)
+View the live project [here](https://xewar.github.io/to-do-list/)
 
 **In this project I practiced:**
 
